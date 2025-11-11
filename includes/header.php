@@ -21,7 +21,6 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'ADMIN';
                 </svg>
                 Tableau de bord
             </a>
-            
             <a href="reports.php" class="nav-link <?php echo $currentPage === 'reports.php' ? 'active' : ''; ?>">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -32,8 +31,6 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'ADMIN';
                 </svg>
                 Mes Rapports
             </a>
-            
-            <?php if ($isAdmin): ?>
             <a href="admin-reports.php" class="nav-link <?php echo $currentPage === 'admin-reports.php' ? 'active' : ''; ?>">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
@@ -41,7 +38,6 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'ADMIN';
                 </svg>
                 Rapports Admin
             </a>
-            
             <a href="users.php" class="nav-link <?php echo $currentPage === 'users.php' ? 'active' : ''; ?>">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -51,7 +47,13 @@ $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'ADMIN';
                 </svg>
                 Utilisateurs
             </a>
-            <?php endif; ?>
+            <a href="convoy-detail.php?id=1" class="nav-link <?php echo $currentPage === 'convoy-detail.php' ? 'active' : ''; ?>">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                </svg>
+                Détail Convoi
+            </a>
         </nav>
         
         <div class="header-right">
