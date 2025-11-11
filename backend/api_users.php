@@ -33,30 +33,27 @@ switch ($action) {
         
     case 'create':
         $data = json_decode(file_get_contents('php://input'), true);
-        
-        if (empty($data['username']) || empty($data['password']) || empty($data['email'])) {
-            echo json_encode(['success' => false, 'message' => 'Champs requis manquants']);
-            exit();
+        // Vérification des champs requis
+        $required = ['employee_id', 'username', 'password', 'firstname', 'lastname', 'email', 'role', 'active'];
+        foreach ($required as $field) {
+            if (!isset($data[$field]) || $data[$field] === '') {
+                echo json_encode(['success' => false, 'message' => "Champ requis manquant: $field"]);
+                exit();
+            }
         }
-        
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
-        
-        $sql = "INSERT INTO users (employee_id, username, password, firstname, lastname, email, role, active) 
-                VALUES (:employee_id, :username, :password, :firstname, :lastname, :email, :role, :active)";
-        
+        $sql = "INSERT INTO users (employee_id, username, password, firstname, lastname, email, role, active) VALUES (:employee_id, :username, :password, :firstname, :lastname, :email, :role, :active)";
         $params = [
-            'employee_id' => $data['employee_id'] ?? '',
+            'employee_id' => $data['employee_id'],
             'username' => $data['username'],
             'password' => $hashedPassword,
-            'firstname' => $data['firstname'] ?? '',
-            'lastname' => $data['lastname'] ?? '',
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
             'email' => $data['email'],
-            'role' => $data['role'] ?? 'USER',
-            'active' => $data['active'] ?? 1
+            'role' => $data['role'],
+            'active' => $data['active']
         ];
-        
         $result = executeQuery($sql, $params);
-        
         if ($result) {
             echo json_encode(['success' => true, 'message' => 'Utilisateur créé avec succès']);
         } else {
