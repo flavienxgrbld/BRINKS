@@ -44,6 +44,10 @@ if ($currentUser['role'] === 'ADMIN') {
                     <input type="text" id="convoyNumber" name="convoy_number" required>
                 </div>
                 <div class="form-group">
+                    <label for="departureAddress">Adresse de départ *</label>
+                    <input type="text" id="departureAddress" name="departure_address" required>
+                </div>
+                <div class="form-group">
                     <label for="startDate">Date de début *</label>
                     <input type="datetime-local" id="startDate" name="start_datetime" required>
                 </div>
@@ -115,6 +119,7 @@ if ($currentUser['role'] === 'ADMIN') {
         const form = e.target;
         const data = {
             convoy_number: form.convoy_number.value,
+            departure_address: form.departure_address.value,
             start_datetime: form.start_datetime.value,
             pallets_recovered: form.pallets_recovered.value,
             status: form.status.value
