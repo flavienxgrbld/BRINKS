@@ -16,6 +16,55 @@ if ($currentUser['role'] === 'ADMIN') {
 </head>
 <body>
     <?php include __DIR__ . '/includes/header.php'; ?>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Mes Rapports de Convois</h1>
+            <p class="subtitle">Liste des convois auxquels vous avez participé</p>
+            <button class="btn btn-primary" onclick="openCreateReportModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Créer un rapport
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal création rapport -->
+    <div id="createReportModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Créer un rapport de convoi</h2>
+                <button class="modal-close" onclick="closeCreateReportModal()">&times;</button>
+            </div>
+            <form id="createReportForm">
+                <div class="form-group">
+                    <label for="convoyNumber">Numéro du convoi *</label>
+                    <input type="text" id="convoyNumber" name="convoy_number" required>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Date de début *</label>
+                    <input type="datetime-local" id="startDate" name="start_datetime" required>
+                </div>
+                <div class="form-group">
+                    <label for="palletsRecovered">Palettes récupérées</label>
+                    <input type="number" id="palletsRecovered" name="pallets_recovered" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="status">Statut</label>
+                    <select id="status" name="status">
+                        <option value="EN_COURS">En cours</option>
+                        <option value="TERMINE">Terminé</option>
+                        <option value="ANNULE">Annulé</option>
+                    </select>
+                </div>
+                <div class="form-group align-end">
+                    <button type="submit" class="btn btn-success">Créer</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <div class="container">
         <div class="page-header">
@@ -54,6 +103,41 @@ if ($currentUser['role'] === 'ADMIN') {
     </div>
     
     <script src="js/main.js"></script>
+    <script>
+    function openCreateReportModal() {
+        document.getElementById('createReportModal').style.display = 'block';
+    }
+    function closeCreateReportModal() {
+        document.getElementById('createReportModal').style.display = 'none';
+    }
+    document.getElementById('createReportForm').onsubmit = async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const data = {
+            convoy_number: form.convoy_number.value,
+            start_datetime: form.start_datetime.value,
+            pallets_recovered: form.pallets_recovered.value,
+            status: form.status.value
+        };
+        try {
+            const response = await fetch('backend/api_convoys.php?action=create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if (result.success) {
+                showNotification('Convoi créé avec succès', 'success');
+                loadReports();
+            } else {
+                showNotification(result.message || 'Erreur lors de la création', 'error');
+            }
+        } catch (err) {
+            showNotification('Erreur de communication', 'error');
+        }
+        closeCreateReportModal();
+    };
+    </script>
     <script>
         // Charger les rapports de l'utilisateur
         async function loadReports() {

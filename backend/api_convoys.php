@@ -14,6 +14,38 @@ requireLogin();
 $action = $_GET['action'] ?? '';
 
 switch ($action) {
+    case 'create':
+        // Création d'un nouveau convoi
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+            exit();
+        }
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            $data = $_POST;
+        }
+        $convoy_number = $data['convoy_number'] ?? '';
+        $start_datetime = $data['start_datetime'] ?? '';
+        $pallets_recovered = $data['pallets_recovered'] ?? 0;
+        $status = $data['status'] ?? 'EN_COURS';
+        if (empty($convoy_number) || empty($start_datetime)) {
+            echo json_encode(['success' => false, 'message' => 'Champs requis manquants']);
+            exit();
+        }
+        $sql = "INSERT INTO convoys (convoy_number, start_datetime, pallets_recovered, status, created_at) VALUES (:convoy_number, :start_datetime, :pallets_recovered, :status, NOW())";
+        $params = [
+            'convoy_number' => $convoy_number,
+            'start_datetime' => $start_datetime,
+            'pallets_recovered' => $pallets_recovered,
+            'status' => $status
+        ];
+        $result = executeQuery($sql, $params);
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Convoi créé avec succès']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Erreur lors de la création']);
+        }
+        exit();
     case 'list':
         if (isAdmin()) {
             $sql = "SELECT c.*, 
