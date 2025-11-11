@@ -1,4 +1,4 @@
-&lt;?php
+<?php
 require_once __DIR__ . '/backend/auth.php';
 requireAdmin();
 $currentUser = getCurrentUser();

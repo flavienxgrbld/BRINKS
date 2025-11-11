@@ -1,7 +1,10 @@
-&lt;?php
+<?php
 require_once __DIR__ . '/backend/auth.php';
 requireLogin();
 $currentUser = getCurrentUser();
+if ($currentUser['role'] === 'ADMIN') {
+    // Les admins ont accès à tout
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
