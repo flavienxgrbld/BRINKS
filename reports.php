@@ -66,6 +66,7 @@ if ($currentUser['role'] === 'ADMIN') {
                     <textarea id="personnel" name="personnel" rows="3" required placeholder="Saisir les noms du personnel présent"></textarea>
                 </div>
                 <div class="form-group align-end">
+                    <div id="dynamicFields"></div>
                     <button type="submit" class="btn btn-success">Créer</button>
                 </div>
             </form>
@@ -110,6 +111,29 @@ if ($currentUser['role'] === 'ADMIN') {
     
     <script src="js/main.js"></script>
     <script>
+    // Affichage dynamique des champs selon le type de convoi
+    document.getElementById('convoyType').addEventListener('change', function() {
+        const type = this.value;
+        const container = document.getElementById('dynamicFields');
+        let html = '';
+        if (type === 'RECOLTE') {
+            html = `<div class="form-group"><label for="pallets_recolte">Palettes récoltées *</label><input type="number" id="pallets_recolte" name="pallets_recolte" min="0" required></div>`;
+        } else if (type === 'TRAITEMENT_SEUL') {
+            html = `<div class="form-group"><label for="pallets_traite">Palettes traitées *</label><input type="number" id="pallets_traite" name="pallets_traite" min="0" required></div>`;
+        } else if (type === 'REVENTE_SEUL') {
+            html = `<div class="form-group"><label for="pallets_revendu">Palettes revendues *</label><input type="number" id="pallets_revendu" name="pallets_revendu" min="0" required></div>`;
+        } else if (type === 'TRAITEMENT_REVENTE') {
+            html = `<div class="form-group"><label for="pallets_traite">Palettes traitées *</label><input type="number" id="pallets_traite" name="pallets_traite" min="0" required></div>`;
+            html += `<div class="form-group"><label for="pallets_revendu">Palettes revendues *</label><input type="number" id="pallets_revendu" name="pallets_revendu" min="0" required></div>`;
+        }
+        container.innerHTML = html;
+    });
+    // Initialisation au chargement
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('convoyType').dispatchEvent(new Event('change'));
+    });
+    </script>
+    <script>
 // Charger la liste du personnel au chargement du modal
 function loadPersonnelOptions() {
     fetch('backend/api_users.php?action=list')
@@ -148,6 +172,17 @@ function openCreateReportModal() {
             end_datetime: form.end_datetime.value,
             personnel: form.personnel.value
         };
+        // Ajout des champs dynamiques selon le type
+        if (form.convoy_type.value === 'RECOLTE') {
+            data.pallets_recolte = form.pallets_recolte.value;
+        } else if (form.convoy_type.value === 'TRAITEMENT_SEUL') {
+            data.pallets_traite = form.pallets_traite.value;
+        } else if (form.convoy_type.value === 'REVENTE_SEUL') {
+            data.pallets_revendu = form.pallets_revendu.value;
+        } else if (form.convoy_type.value === 'TRAITEMENT_REVENTE') {
+            data.pallets_traite = form.pallets_traite.value;
+            data.pallets_revendu = form.pallets_revendu.value;
+        }
         try {
             const response = await fetch('backend/api_convoys.php?action=create', {
                 method: 'POST',

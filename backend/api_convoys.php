@@ -20,11 +20,29 @@ switch ($action) {
             $start_datetime = $data['start_datetime'] ?? '';
             $end_datetime = $data['end_datetime'] ?? '';
             $personnel = $data['personnel'] ?? '';
-            if (empty($convoy_number) || empty($convoy_type) || empty($start_datetime) || empty($end_datetime) || empty($personnel)) {
+            // Champs dynamiques
+            $pallets_recolte = $data['pallets_recolte'] ?? null;
+            $pallets_traite = $data['pallets_traite'] ?? null;
+            $pallets_revendu = $data['pallets_revendu'] ?? null;
+
+            // Vérification des champs requis selon le type
+            $missing = empty($convoy_number) || empty($convoy_type) || empty($start_datetime) || empty($end_datetime) || empty($personnel);
+            if ($convoy_type === 'RECOLTE') {
+                $missing = $missing || ($pallets_recolte === null || $pallets_recolte === '');
+            } elseif ($convoy_type === 'TRAITEMENT_SEUL') {
+                $missing = $missing || ($pallets_traite === null || $pallets_traite === '');
+            } elseif ($convoy_type === 'REVENTE_SEUL') {
+                $missing = $missing || ($pallets_revendu === null || $pallets_revendu === '');
+            } elseif ($convoy_type === 'TRAITEMENT_REVENTE') {
+                $missing = $missing || ($pallets_traite === null || $pallets_traite === '' || $pallets_revendu === null || $pallets_revendu === '');
+            }
+            if ($missing) {
                 echo json_encode(['success' => false, 'message' => 'Champs requis manquants']);
                 exit();
             }
-            $sql = "INSERT INTO convoys (convoy_number, convoy_type, start_datetime, end_datetime, personnel, created_at) VALUES (:convoy_number, :convoy_type, :start_datetime, :end_datetime, :personnel, NOW())";
+
+            // Construction de l'INSERT selon le type
+            $sql = "INSERT INTO convoys (convoy_number, convoy_type, start_datetime, end_datetime, personnel";
             $params = [
                 'convoy_number' => $convoy_number,
                 'convoy_type' => $convoy_type,
@@ -32,6 +50,30 @@ switch ($action) {
                 'end_datetime' => $end_datetime,
                 'personnel' => $personnel
             ];
+            if ($convoy_type === 'RECOLTE') {
+                $sql .= ", pallets_recolte";
+                $params['pallets_recolte'] = $pallets_recolte;
+            }
+            if ($convoy_type === 'TRAITEMENT_SEUL' || $convoy_type === 'TRAITEMENT_REVENTE') {
+                $sql .= ", pallets_traite";
+                $params['pallets_traite'] = $pallets_traite;
+            }
+            if ($convoy_type === 'REVENTE_SEUL' || $convoy_type === 'TRAITEMENT_REVENTE') {
+                $sql .= ", pallets_revendu";
+                $params['pallets_revendu'] = $pallets_revendu;
+            }
+            $sql .= ", created_at) VALUES (:convoy_number, :convoy_type, :start_datetime, :end_datetime, :personnel";
+            if ($convoy_type === 'RECOLTE') {
+                $sql .= ", :pallets_recolte";
+            }
+            if ($convoy_type === 'TRAITEMENT_SEUL' || $convoy_type === 'TRAITEMENT_REVENTE') {
+                $sql .= ", :pallets_traite";
+            }
+            if ($convoy_type === 'REVENTE_SEUL' || $convoy_type === 'TRAITEMENT_REVENTE') {
+                $sql .= ", :pallets_revendu";
+            }
+            $sql .= ", NOW())";
+
             $result = executeQuery($sql, $params);
             if ($result) {
                 echo json_encode(['success' => true, 'message' => 'Convoi créé avec succès']);
