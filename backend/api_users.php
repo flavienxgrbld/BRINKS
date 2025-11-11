@@ -18,7 +18,7 @@ $action = $_GET['action'] ?? '';
 
 switch ($action) {
     case 'list':
-    $sql = "SELECT id, firstname, lastname FROM users WHERE active = 1 ORDER BY lastname, firstname";
+    $sql = "SELECT id, employee_id, username, firstname, lastname, email, role, active FROM users ORDER BY created_at DESC";
     $users = fetchAll($sql);
     echo json_encode(['success' => true, 'users' => $users]);
     break;
