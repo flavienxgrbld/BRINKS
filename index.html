@@ -29,27 +29,30 @@
     <script src="app.js"></script>
     <script>
         // Vérifier si l'utilisateur est connecté
-        if (!isLoggedIn()) {
-            window.location.href = 'login.html';
-        } else {
-            displayUserInfo();
-        }
+        isLoggedIn().then(async loggedIn => {
+            if (!loggedIn) {
+                window.location.href = 'login.html';
+            } else {
+                await displayUserInfo();
+            }
+        });
 
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            logout();
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            await logout();
             window.location.href = 'login.html';
         });
 
-        function displayUserInfo() {
-            const currentUser = getCurrentUser();
-            if (currentUser) {
+        async function displayUserInfo() {
+            const user = await getCurrentUser();
+            if (user) {
                 document.getElementById('userInfo').innerHTML = `
-                    <span>Connecté en tant que: <strong>${currentUser.username}</strong></span>
+                    <span>Connecté en tant que: <strong>${user.username}</strong></span>
                 `;
                 document.getElementById('userDetails').innerHTML = `
-                    <p><strong>Nom d'utilisateur:</strong> ${currentUser.username}</p>
-                    <p><strong>Email:</strong> ${currentUser.email}</p>
-                    <p><strong>Connecté depuis:</strong> ${new Date().toLocaleString('fr-FR')}</p>
+                    <p><strong>Nom d'utilisateur:</strong> ${user.username}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Compte créé le:</strong> ${new Date(user.created_at).toLocaleString('fr-FR')}</p>
+                    ${user.last_login ? `<p><strong>Dernière connexion:</strong> ${new Date(user.last_login).toLocaleString('fr-FR')}</p>` : ''}
                 `;
             }
         }

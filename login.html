@@ -35,18 +35,22 @@
     <script src="app.js"></script>
     <script>
         // Rediriger si déjà connecté
-        if (isLoggedIn()) {
-            window.location.href = 'index.html';
-        }
+        isLoggedIn().then(loggedIn => {
+            if (loggedIn) {
+                window.location.href = 'index.html';
+            }
+        });
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('loginError');
             
-            if (login(username, password)) {
+            const success = await login(username, password);
+            
+            if (success) {
                 window.location.href = 'index.html';
             } else {
                 errorDiv.textContent = 'Nom d\'utilisateur ou mot de passe incorrect';
