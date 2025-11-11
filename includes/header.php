@@ -1,6 +1,12 @@
 &lt;?php
 $currentPage = basename($_SERVER['PHP_SELF']);
 $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'ADMIN';
+if (!isset($currentPage)) {
+    $currentPage = basename($_SERVER['PHP_SELF']);
+}
+if (!isset($isAdmin)) {
+    $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'ADMIN';
+}
 ?>
 <header class="main-header">
     <div class="header-container">
