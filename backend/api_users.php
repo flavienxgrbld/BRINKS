@@ -63,6 +63,8 @@ switch ($action) {
         } catch (PDOException $e) {
             if (strpos($e->getMessage(), 'Duplicate entry') !== false && strpos($e->getMessage(), 'email') !== false) {
                 echo json_encode(['success' => false, 'message' => 'Cet email est déjà utilisé.']);
+            } elseif (strpos($e->getMessage(), 'Duplicate entry') !== false && strpos($e->getMessage(), 'employee_id') !== false) {
+                echo json_encode(['success' => false, 'message' => "Cet ID employé est déjà utilisé."]);
             } else {
                 echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             }

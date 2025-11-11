@@ -247,9 +247,11 @@ $currentUser = getCurrentUser();
                     closeUserModal();
                     loadUsers();
                 } else {
-                    // Gestion explicite de l'erreur email déjà utilisé
-                    if (result.message && result.message.includes('Duplicate entry') && result.message.includes('email')) {
+                    // Gestion explicite de l'erreur email ou ID employé déjà utilisé
+                    if (result.message && result.message.includes('email')) {
                         showNotification('Cet email est déjà utilisé.', 'error');
+                    } else if (result.message && result.message.includes('ID employé')) {
+                        showNotification('Cet ID employé est déjà utilisé.', 'error');
                     } else {
                         showNotification(result.message, 'error');
                     }
