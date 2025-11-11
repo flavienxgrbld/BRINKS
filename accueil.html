@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - BRINKS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>BRINKS - Tableau de bord</h1>
+        <button id="logoutBtn" class="btn-logout">Déconnexion</button>
+    </div>
+    <div class="container">
+        <h2>Bienvenue !</h2>
+        <p>Vous êtes maintenant connecté à votre espace BRINKS.</p>
+        <div class="dashboard">
+            <div class="card">
+                <h3>Mes opérations</h3>
+                <p>Gérer vos opérations quotidiennes</p>
+            </div>
+            <div class="card">
+                <h3>Rapports</h3>
+                <p>Consulter les rapports et statistiques</p>
+            </div>
+            <div class="card">
+                <h3>Paramètres</h3>
+                <p>Configurer votre compte</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Vérifier si l'utilisateur est connecté
+        if (!sessionStorage.getItem('isLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Gestion de la déconnexion
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            sessionStorage.removeItem('isLoggedIn');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
