@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Site Sécurisé</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bienvenue</h1>
+            <div id="userInfo"></div>
+        </header>
+        
+        <main>
+            <div class="welcome-section">
+                <h2>Tableau de bord</h2>
+                <p>Vous êtes connecté avec succès.</p>
+                <div class="user-details" id="userDetails"></div>
+            </div>
+            
+            <div class="actions">
+                <button id="logoutBtn" class="btn btn-danger">Se déconnecter</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Vérifier si l'utilisateur est connecté
+        if (!isLoggedIn()) {
+            window.location.href = 'login.html';
+        } else {
+            displayUserInfo();
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            logout();
+            window.location.href = 'login.html';
+        });
+
+        function displayUserInfo() {
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                document.getElementById('userInfo').innerHTML = `
+                    <span>Connecté en tant que: <strong>${currentUser.username}</strong></span>
+                `;
+                document.getElementById('userDetails').innerHTML = `
+                    <p><strong>Nom d'utilisateur:</strong> ${currentUser.username}</p>
+                    <p><strong>Email:</strong> ${currentUser.email}</p>
+                    <p><strong>Connecté depuis:</strong> ${new Date().toLocaleString('fr-FR')}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
