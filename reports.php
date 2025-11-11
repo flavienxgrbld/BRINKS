@@ -63,9 +63,7 @@ if ($currentUser['role'] === 'ADMIN') {
                 </div>
                 <div class="form-group">
                     <label for="personnel">Personnel présent *</label>
-                    <select id="personnel" name="personnel[]" multiple required>
-                        <!-- Options générées dynamiquement en JS -->
-                    </select>
+                    <textarea id="personnel" name="personnel" rows="3" required placeholder="Saisir les noms du personnel présent"></textarea>
                 </div>
                 <div class="form-group align-end">
                     <button type="submit" class="btn btn-success">Créer</button>
