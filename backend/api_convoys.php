@@ -1,3 +1,22 @@
+    case 'delete':
+        // Suppression d'un convoi (admin uniquement)
+        if (!isAdmin()) {
+            echo json_encode(['success' => false, 'message' => 'Accès refusé']);
+            exit();
+        }
+        $id = $_GET['id'] ?? 0;
+        if (!$id) {
+            echo json_encode(['success' => false, 'message' => 'ID manquant']);
+            exit();
+        }
+        $sql = "DELETE FROM convoys WHERE id = :id";
+        $result = executeQuery($sql, ['id' => $id]);
+        if ($result) {
+            echo json_encode(['success' => true, 'message' => 'Convoi supprimé avec succès']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Erreur lors de la suppression']);
+        }
+        exit();
 <?php
 /**
  * API de gestion des convois

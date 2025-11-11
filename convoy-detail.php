@@ -44,6 +44,15 @@ if ($currentUser['role'] === 'ADMIN') {
                 </svg>
                 Imprimer
             </button>
+            <?php if ($currentUser['role'] === 'ADMIN') : ?>
+            <button class="btn btn-danger" id="deleteConvoyBtn" style="margin-left:10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                Supprimer ce convoi
+            </button>
+            <?php endif; ?>
         </div>
         
         <div id="convoyDetails">
@@ -318,7 +327,28 @@ if ($currentUser['role'] === 'ADMIN') {
         }
         
         // Charger au chargement de la page
-        document.addEventListener('DOMContentLoaded', loadConvoyDetails);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadConvoyDetails();
+            const deleteBtn = document.getElementById('deleteConvoyBtn');
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', async () => {
+                    if (confirm('Êtes-vous sûr de vouloir supprimer ce convoi ?')) {
+                        try {
+                            const response = await fetch(`backend/api_convoys.php?action=delete&id=${convoyId}`, { method: 'POST' });
+                            const result = await response.json();
+                            if (result.success) {
+                                alert('Convoi supprimé avec succès');
+                                window.location.href = 'admin-reports.php';
+                            } else {
+                                alert(result.message || 'Erreur lors de la suppression');
+                            }
+                        } catch (error) {
+                            alert('Erreur lors de la suppression');
+                        }
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
