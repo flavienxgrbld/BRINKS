@@ -192,18 +192,17 @@ $currentUser = getCurrentUser();
         
         // Éditer un utilisateur
         async function editUser(id) {
-            const user = users.find(u => u.id === id);
+            const user = users.find(u => u.id == id);
             if (!user) return;
-            
             document.getElementById('modalTitle').textContent = 'Modifier un utilisateur';
-            document.getElementById('userId').value = user.id;
-            document.getElementById('employeeId').value = user.employee_id;
-            document.getElementById('userUsername').value = user.username;
-            document.getElementById('firstname').value = user.firstname;
-            document.getElementById('lastname').value = user.lastname;
-            document.getElementById('userEmail').value = user.email;
-            document.getElementById('userRole').value = user.role;
-            document.getElementById('userActive').value = user.active;
+            document.getElementById('userId').value = user.id || '';
+            document.getElementById('employeeId').value = user.employee_id || '';
+            document.getElementById('userUsername').value = user.username || '';
+            document.getElementById('firstname').value = user.firstname || '';
+            document.getElementById('lastname').value = user.lastname || '';
+            document.getElementById('userEmail').value = user.email || '';
+            document.getElementById('userRole').value = user.role || 'USER';
+            document.getElementById('userActive').value = (user.active != null ? user.active : '1');
             document.getElementById('userPassword').value = '';
             document.getElementById('passwordOptional').style.display = 'inline';
             document.getElementById('userPassword').required = false;
