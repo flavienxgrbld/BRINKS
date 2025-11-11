@@ -31,14 +31,38 @@
     </div>
     <script>
         // Vérifier si l'utilisateur est connecté
-        if (!sessionStorage.getItem('isLoggedIn')) {
-            window.location.href = 'login.html';
+        async function checkAuth() {
+            try {
+                const response = await fetch('api/check_auth.php');
+                const data = await response.json();
+                
+                if (!data.authenticated) {
+                    window.location.href = 'login.html';
+                } else {
+                    // Afficher le nom d'utilisateur
+                    const username = data.user.username;
+                    document.querySelector('.header h1').textContent = `BRINKS - Bienvenue ${username}`;
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                window.location.href = 'login.html';
+            }
         }
 
+        // Vérifier l'authentification au chargement
+        checkAuth();
+
         // Gestion de la déconnexion
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            sessionStorage.removeItem('isLoggedIn');
-            window.location.href = 'login.html';
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            try {
+                await fetch('api/logout.php');
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Erreur:', error);
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
         });
     </script>
 </body>
