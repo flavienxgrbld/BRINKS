@@ -10,7 +10,7 @@ ini_set('display_errors', 1);
 echo "<h2>Test de connexion MySQL pour BRINKS</h2>";
 
 // Configuration
-$host = '192.168.1.200';
+$host = 'localhost';
 $dbname = 'brinks_db';
 $user = 'root';
 $pass = '@Dmin_password';
