@@ -1,7 +1,4 @@
-                <div class="form-group">
-                    <label for="arrivalAddress">Adresse d'arrivée *</label>
-                    <input type="text" id="arrivalAddress" name="arrival_address" required>
-                </div>
+                <!-- Champ déplacé dans le formulaire modal -->
 <?php
 require_once __DIR__ . '/backend/auth.php';
 requireLogin();
@@ -50,6 +47,10 @@ if ($currentUser['role'] === 'ADMIN') {
                 <div class="form-group">
                     <label for="departureAddress">Adresse de départ *</label>
                     <input type="text" id="departureAddress" name="departure_address" required>
+                </div>
+                <div class="form-group">
+                    <label for="arrivalAddress">Adresse d'arrivée *</label>
+                    <input type="text" id="arrivalAddress" name="arrival_address" required>
                 </div>
                 <div class="form-group">
                     <label for="startDate">Date de début *</label>
