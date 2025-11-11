@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - BRINKS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">BRINKS</div>
+            <div class="nav-user">
+                <span id="username-display"></span>
+                <span id="role-badge" class="badge"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Déconnexion</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Bienvenue, <span id="welcome-username"></span>!</h1>
+            <p>Vous êtes connecté avec le rôle : <strong id="user-role"></strong></p>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <h2>Informations du compte</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Nom d'utilisateur:</label>
+                        <span id="info-username"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>Email:</label>
+                        <span id="info-email"></span>
+                    </div>
+                    <div class="info-item">
+                        <label>Rôle:</label>
+                        <span id="info-role"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="admin-section" class="card" style="display: none;">
+                <h2>Administration</h2>
+                <p>Vous avez accès aux fonctionnalités d'administration.</p>
+                <a href="/admin/users" class="btn btn-primary">Gestion des utilisateurs</a>
+            </div>
+
+            <div class="card">
+                <h2>Navigation</h2>
+                <div class="nav-links">
+                    <a href="/home" class="btn btn-secondary">Actualiser la page</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/home.js"></script>
+</body>
+</html>
