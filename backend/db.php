@@ -8,7 +8,7 @@
 define('DB_HOST', 'SRV-MGT-01');
 define('DB_NAME', 'brinks_db');
 define('DB_USER', 'root');  // À modifier selon votre configuration
-define('DB_PASS', '@Dmin_passwordcd  ..');      // À modifier selon votre configuration
+define('DB_PASS', '@Dmin_password');      // À modifier selon votre configuration
 define('DB_CHARSET', 'utf8mb4');
 
 // Options PDO pour une meilleure sécurité et gestion des erreurs
