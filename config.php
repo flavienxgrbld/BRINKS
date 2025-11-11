@@ -1,8 +1,8 @@
 <?php
 // Configuration de la base de données
-define('DB_HOST', 'localhost');
+define('DB_HOST', '192.168.1.200');
 define('DB_USER', 'root');  // Changez selon votre configuration
-define('DB_PASS', '');      // Changez selon votre configuration
+define('DB_PASS', '@Dmin_password');      // Changez selon votre configuration
 define('DB_NAME', 'brinks_db');
 
 // Connexion à la base de données
