@@ -5,7 +5,7 @@
  */
 
 // Configuration de la base de données
-define('DB_HOST', '192.168.1.200');
+define('DB_HOST', 'localhost');
 define('DB_NAME', 'brinks_db');
 define('DB_USER', 'root');  // À modifier selon votre configuration
 define('DB_PASS', '@Dmin_password');      // À modifier selon votre configuration
