@@ -1,12 +1,8 @@
 &lt;?php
-session_start();
 require_once __DIR__ . '/backend/auth.php';
-
-// Vérifier que l'utilisateur est connecté
 requireLogin();
 
 $convoyId = $_GET['id'] ?? 0;
-
 if (!$convoyId) {
     header('Location: /reports.php');
     exit();

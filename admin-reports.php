@@ -1,10 +1,6 @@
 &lt;?php
-session_start();
 require_once __DIR__ . '/backend/auth.php';
-
-// Vérifier que l'utilisateur est admin
 requireAdmin();
-
 $currentUser = getCurrentUser();
 ?>
 <!DOCTYPE html>
