@@ -2,14 +2,13 @@
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Rediriger vers index.php si le fichier n'existe pas
+
+    # Ne pas rediriger les fichiers PHP existants
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !\.php$
     RewriteRule ^(.*)$ index.php [L,QSA]
-</IfModule>
-
-# Protection des fichiers sensibles
+</IfModule># Protection des fichiers sensibles
 <FilesMatch "\.(env|ini|log|sh|sql)$">
     Order allow,deny
     Deny from all
