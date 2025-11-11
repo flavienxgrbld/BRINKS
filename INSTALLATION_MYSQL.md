@@ -11,11 +11,22 @@ ssh root@srv-web-01
 # Mettre à jour les paquets
 sudo apt update
 
-# Installer MySQL Server
-sudo apt install mysql-server -y
+# Vérifier la version Debian/Ubuntu
+lsb_release -a
 
-# Vérifier que MySQL est démarré
+# Option A: Installer MariaDB (recommandé, 100% compatible MySQL)
+sudo apt install mariadb-server mariadb-client -y
+
+# OU Option B: Installer MySQL depuis les dépôts officiels
+# wget https://dev.mysql.com/get/mysql-apt-config_0.8.29-1_all.deb
+# sudo dpkg -i mysql-apt-config_0.8.29-1_all.deb
+# sudo apt update
+# sudo apt install mysql-server -y
+
+# Vérifier que MySQL/MariaDB est démarré
 sudo systemctl status mysql
+# ou
+sudo systemctl status mariadb
 
 # Démarrer MySQL si nécessaire
 sudo systemctl start mysql
