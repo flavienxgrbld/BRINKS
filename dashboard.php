@@ -28,21 +28,6 @@ $currentUser = getCurrentUser();
         </div>
         
         <div class="dashboard-content">
-            <?php if ($currentUser['role'] === 'ADMIN'): ?>
-            <div class="card quick-links">
-                <div class="card-header">
-                    <h2>Accès rapide administrateur</h2>
-                </div>
-                <div class="card-body">
-                    <ul class="quick-links-list">
-                        <li><a href="admin-reports.php" class="btn btn-info">Rapports Admin</a></li>
-                        <li><a href="users.php" class="btn btn-warning">Gestion des utilisateurs</a></li>
-                        <li><a href="reports.php" class="btn btn-primary">Mes Rapports</a></li>
-                        <li><a href="convoy-detail.php?id=1" class="btn btn-secondary">Détail Convoi (exemple)</a></li>
-                    </ul>
-                </div>
-            </div>
-            <?php endif; ?>
             <div class="card">
                 <div class="card-header">
                     <h2>Activité récente</h2>
