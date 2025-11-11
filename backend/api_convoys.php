@@ -3,6 +3,28 @@
         if (!isAdmin()) {
             echo json_encode(['success' => false, 'message' => 'Accès refusé']);
             exit();
+/**
+        <?php
+        /**
+         * API de gestion des convois
+         * BRINKS - Système de gestion de convois
+         */
+
+        header('Content-Type: application/json');
+        session_start();
+
+        require_once __DIR__ . '/auth.php';
+
+        requireLogin();
+
+        $action = $_GET['action'] ?? '';
+
+ * API de gestion des convois
+    case 'delete':
+        // Suppression d'un convoi (admin uniquement)
+        if (!isAdmin()) {
+            echo json_encode(['success' => false, 'message' => 'Accès refusé']);
+            exit();
         }
         $id = $_GET['id'] ?? 0;
         if (!$id) {
@@ -17,9 +39,6 @@
             echo json_encode(['success' => false, 'message' => 'Erreur lors de la suppression']);
         }
         exit();
-<?php
-/**
- * API de gestion des convois
  * BRINKS - Système de gestion de convois
  */
 
