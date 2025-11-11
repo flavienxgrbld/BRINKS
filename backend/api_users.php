@@ -53,11 +53,19 @@ switch ($action) {
             'role' => $data['role'],
             'active' => $data['active']
         ];
-        $result = executeQuery($sql, $params);
-        if ($result) {
-            echo json_encode(['success' => true, 'message' => 'Utilisateur créé avec succès']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Erreur lors de la création']);
+        try {
+            $result = executeQuery($sql, $params);
+            if ($result) {
+                echo json_encode(['success' => true, 'message' => 'Utilisateur créé avec succès']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Erreur lors de la création']);
+            }
+        } catch (PDOException $e) {
+            if (strpos($e->getMessage(), 'Duplicate entry') !== false && strpos($e->getMessage(), 'email') !== false) {
+                echo json_encode(['success' => false, 'message' => 'Cet email est déjà utilisé.']);
+            } else {
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            }
         }
         break;
         

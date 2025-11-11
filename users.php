@@ -218,33 +218,41 @@ $currentUser = getCurrentUser();
         // Soumettre le formulaire
         document.getElementById('userForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData.entries());
+            // Construction explicite des données pour éviter les undefined
+            const data = {
+                id: document.getElementById('userId').value,
+                employee_id: document.getElementById('employeeId').value,
+                username: document.getElementById('userUsername').value,
+                firstname: document.getElementById('firstname').value,
+                lastname: document.getElementById('lastname').value,
+                email: document.getElementById('userEmail').value,
+                password: document.getElementById('userPassword').value,
+                role: document.getElementById('userRole').value,
+                active: document.getElementById('userActive').value
+            };
             const userId = data.id;
-            
-            // Supprimer le mot de passe vide pour la modification
             if (!data.password) {
                 delete data.password;
             }
-            
             const action = userId ? 'update' : 'create';
-            
             try {
                 const response = await fetch(`backend/api_users.php?action=${action}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                
                 const result = await response.json();
-                
                 if (result.success) {
                     showNotification(result.message, 'success');
                     closeUserModal();
                     loadUsers();
                 } else {
-                    showNotification(result.message, 'error');
+                    // Gestion explicite de l'erreur email déjà utilisé
+                    if (result.message && result.message.includes('Duplicate entry') && result.message.includes('email')) {
+                        showNotification('Cet email est déjà utilisé.', 'error');
+                    } else {
+                        showNotification(result.message, 'error');
+                    }
                 }
             } catch (error) {
                 console.error('Erreur:', error);
