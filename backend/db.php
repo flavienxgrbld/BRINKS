@@ -22,8 +22,8 @@ $options = [
 ];
 
 try {
-    // Création de la connexion PDO
-    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+    // Création de la connexion PDO avec port explicite
+    $dsn = "mysql:host=" . DB_HOST . ";port=3306;dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
     $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
 } catch (PDOException $e) {
     // En production, logger l'erreur au lieu de l'afficher

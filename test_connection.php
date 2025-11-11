@@ -51,8 +51,8 @@ try {
     $pdo = new PDO($dsn, $user, $pass, $options);
     echo "✅ <strong style='color: green;'>Connexion PDO réussie !</strong><br>";
     
-    // Test 3: Vérifier les tables
-    echo "<h3>3. Tables dans la base de données</h3>";
+    // Test 4: Vérifier les tables
+    echo "<h3>4. Tables dans la base de données</h3>";
     $stmt = $pdo->query("SHOW TABLES");
     $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
     
@@ -66,8 +66,8 @@ try {
         echo "</ul>";
     }
     
-    // Test 4: Vérifier l'utilisateur admin
-    echo "<h3>4. Vérification de l'utilisateur admin</h3>";
+    // Test 5: Vérifier l'utilisateur admin
+    echo "<h3>5. Vérification de l'utilisateur admin</h3>";
     $stmt = $pdo->query("SELECT id, username, email, role FROM users WHERE username = 'admin'");
     $admin = $stmt->fetch();
     
