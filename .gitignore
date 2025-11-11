@@ -1,6 +1,5 @@
 # Fichiers de configuration personnalisés
-backend/db.php
-config.php
+
 
 # Logs
 *.log
