@@ -13,13 +13,13 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BRINKS - Connexion</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="login-page">
     <div class="login-container">
         <div class="login-box">
             <div class="logo-section">
-                <img src="/images/brinks-logo.png" alt="BRINKS Logo" class="logo" onerror="this.style.display='none'">
+                <img src="images/brinks-logo.png" alt="BRINKS Logo" class="logo" onerror="this.style.display='none'">
                 <h1>BRINKS</h1>
                 <p class="subtitle">Système de Gestion de Convois</p>
             </div>
@@ -59,7 +59,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </div>
     
-    <script src="/js/main.js"></script>
+    <script src="js/main.js"></script>
     <script>
         // Gestion de la connexion
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -79,7 +79,7 @@ if (isset($_SESSION['user_id'])) {
             errorDiv.style.display = 'none';
             
             try {
-                const response = await fetch('/backend/api_login.php', {
+                const response = await fetch('backend/api_login.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -91,7 +91,7 @@ if (isset($_SESSION['user_id'])) {
                 
                 if (data.success) {
                     // Rediriger vers le dashboard
-                    window.location.href = '/dashboard.php';
+                    window.location.href = 'dashboard.php';
                 } else {
                     // Afficher l'erreur
                     errorDiv.textContent = data.message || 'Erreur de connexion';

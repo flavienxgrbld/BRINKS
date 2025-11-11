@@ -13,7 +13,7 @@ $currentUser = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord - BRINKS</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <?php include __DIR__ . '/includes/header.php'; ?>
@@ -48,12 +48,12 @@ $currentUser = getCurrentUser();
         </div>
     </div>
     
-    <script src="/js/main.js"></script>
+    <script src="js/main.js"></script>
     <script>
         // Charger les statistiques
         async function loadStats() {
             try {
-                const response = await fetch('/backend/api_convoys.php?action=stats');
+                const response = await fetch('backend/api_convoys.php?action=stats');
                 const data = await response.json();
                 
                 if (data.success) {
@@ -125,7 +125,7 @@ $currentUser = getCurrentUser();
         // Charger l'activité récente
         async function loadRecentActivity() {
             try {
-                const response = await fetch('/backend/api_convoys.php?action=list');
+                const response = await fetch('backend/api_convoys.php?action=list');
                 const data = await response.json();
                 
                 if (data.success) {
@@ -149,7 +149,7 @@ $currentUser = getCurrentUser();
                                     <p>Palettes: ${convoy.pallets_recovered}</p>
                                     <span class="badge badge-${statusClass}">${convoy.status}</span>
                                 </div>
-                                <a href="/convoy-detail.php?id=${convoy.id}" class="btn btn-sm">Détails</a>
+                                <a href="convoy-detail.php?id=${convoy.id}" class="btn btn-sm">Détails</a>
                             </div>
                         `;
                     });

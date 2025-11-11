@@ -13,7 +13,7 @@ $currentUser = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mes Rapports - BRINKS</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <?php include __DIR__ . '/includes/header.php'; ?>
@@ -54,12 +54,12 @@ $currentUser = getCurrentUser();
         </div>
     </div>
     
-    <script src="/js/main.js"></script>
+    <script src="js/main.js"></script>
     <script>
         // Charger les rapports de l'utilisateur
         async function loadReports() {
             try {
-                const response = await fetch('/backend/api_convoys.php?action=list');
+                const response = await fetch('backend/api_convoys.php?action=list');
                 const data = await response.json();
                 
                 if (data.success) {
@@ -101,7 +101,7 @@ $currentUser = getCurrentUser();
                         <td><span class="badge badge-${roleClass}">${convoy.role_in_convoy}</span></td>
                         <td><span class="badge badge-${statusClass}">${convoy.status}</span></td>
                         <td>
-                            <a href="/convoy-detail.php?id=${convoy.id}" class="btn btn-sm">
+                            <a href="convoy-detail.php?id=${convoy.id}" class="btn btn-sm">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>

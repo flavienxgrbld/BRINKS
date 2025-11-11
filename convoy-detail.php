@@ -20,7 +20,7 @@ $currentUser = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails du Convoi - BRINKS</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <?php include __DIR__ . '/includes/header.php'; ?>
@@ -28,7 +28,7 @@ $currentUser = getCurrentUser();
     <div class="container">
         <div class="page-header">
             <div>
-                <a href="<?php echo ($currentUser['role'] === 'ADMIN') ? '/admin-reports.php' : '/reports.php'; ?>" class="btn btn-secondary">
+                <a href="<?php echo ($currentUser['role'] === 'ADMIN') ? 'admin-reports.php' : 'reports.php'; ?>" class="btn btn-secondary">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <line x1="19" y1="12" x2="5" y2="12"></line>
                         <polyline points="12 19 5 12 12 5"></polyline>
@@ -55,14 +55,14 @@ $currentUser = getCurrentUser();
         </div>
     </div>
     
-    <script src="/js/main.js"></script>
+    <script src="js/main.js"></script>
     <script>
         const convoyId = <?php echo $convoyId; ?>;
         
         // Charger les détails du convoi
         async function loadConvoyDetails() {
             try {
-                const response = await fetch(`/backend/api_convoys.php?action=get&id=${convoyId}`);
+                const response = await fetch(`backend/api_convoys.php?action=get&id=${convoyId}`);
                 const data = await response.json();
                 
                 if (data.success) {

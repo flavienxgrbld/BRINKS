@@ -13,7 +13,7 @@ $currentUser = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des utilisateurs - BRINKS</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <?php include __DIR__ . '/includes/header.php'; ?>
@@ -129,14 +129,14 @@ $currentUser = getCurrentUser();
         </div>
     </div>
     
-    <script src="/js/main.js"></script>
+    <script src="js/main.js"></script>
     <script>
         let users = [];
         
         // Charger la liste des utilisateurs
         async function loadUsers() {
             try {
-                const response = await fetch('/backend/api_users.php?action=list');
+                const response = await fetch('backend/api_users.php?action=list');
                 const data = await response.json();
                 
                 if (data.success) {
@@ -235,7 +235,7 @@ $currentUser = getCurrentUser();
             const action = userId ? 'update' : 'create';
             
             try {
-                const response = await fetch(`/backend/api_users.php?action=${action}`, {
+                const response = await fetch(`backend/api_users.php?action=${action}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -263,7 +263,7 @@ $currentUser = getCurrentUser();
             }
             
             try {
-                const response = await fetch(`/backend/api_users.php?action=delete&id=${id}`);
+                const response = await fetch(`backend/api_users.php?action=delete&id=${id}`);
                 const result = await response.json();
                 
                 if (result.success) {

@@ -13,7 +13,7 @@ $currentUser = getCurrentUser();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rapports Administrateur - BRINKS</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <?php include __DIR__ . '/includes/header.php'; ?>
@@ -121,14 +121,14 @@ $currentUser = getCurrentUser();
         </div>
     </div>
     
-    <script src="/js/main.js"></script>
+    <script src="js/main.js"></script>
     <script>
         let currentFilters = {};
         
         // Charger la liste des utilisateurs pour le filtre
         async function loadUsers() {
             try {
-                const response = await fetch('/backend/api_users.php?action=list');
+                const response = await fetch('backend/api_users.php?action=list');
                 const data = await response.json();
                 
                 if (data.success) {
@@ -149,7 +149,7 @@ $currentUser = getCurrentUser();
         async function loadConvoys(filters = {}) {
             try {
                 const params = new URLSearchParams(filters);
-                const response = await fetch(`/backend/api_convoys.php?action=filter&${params}`);
+                const response = await fetch(`backend/api_convoys.php?action=filter&${params}`);
                 const data = await response.json();
                 
                 if (data.success) {
@@ -194,7 +194,7 @@ $currentUser = getCurrentUser();
                         <td>${convoy.personnel_count || 0} personne(s)</td>
                         <td><span class="badge badge-${statusClass}">${convoy.status}</span></td>
                         <td>
-                            <a href="/convoy-detail.php?id=${convoy.id}" class="btn btn-sm">
+                            <a href="convoy-detail.php?id=${convoy.id}" class="btn btn-sm">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
@@ -266,7 +266,7 @@ $currentUser = getCurrentUser();
         function exportData(format) {
             const params = new URLSearchParams(currentFilters);
             params.set('format', format);
-            window.open(`/backend/api_export.php?${params}`, '_blank');
+            window.open(`backend/api_export.php?${params}`, '_blank');
         }
         
         // Charger au chargement de la page
