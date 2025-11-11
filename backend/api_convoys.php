@@ -1,11 +1,10 @@
+<?php
+header('Content-Type: application/json');
+session_start();
+require_once __DIR__ . '/auth.php';
+requireLogin();
+$action = $_GET['action'] ?? '';
 switch ($action) {
-    <?php
-    header('Content-Type: application/json');
-    session_start();
-    require_once __DIR__ . '/auth.php';
-    requireLogin();
-    $action = $_GET['action'] ?? '';
-    switch ($action) {
         case 'create':
             // Création d'un nouveau convoi
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
