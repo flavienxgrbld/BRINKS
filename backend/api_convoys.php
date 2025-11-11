@@ -16,23 +16,21 @@ switch ($action) {
                 $data = $_POST;
             }
             $convoy_number = $data['convoy_number'] ?? '';
-            $departure_address = $data['departure_address'] ?? '';
-            $arrival_address = $data['arrival_address'] ?? '';
+            $convoy_type = $data['convoy_type'] ?? '';
             $start_datetime = $data['start_datetime'] ?? '';
-            $pallets_recovered = $data['pallets_recovered'] ?? 0;
-            $status = $data['status'] ?? 'EN_COURS';
-            if (empty($convoy_number) || empty($departure_address) || empty($arrival_address) || empty($start_datetime)) {
+            $end_datetime = $data['end_datetime'] ?? '';
+            $personnel = $data['personnel'] ?? '';
+            if (empty($convoy_number) || empty($convoy_type) || empty($start_datetime) || empty($end_datetime) || empty($personnel)) {
                 echo json_encode(['success' => false, 'message' => 'Champs requis manquants']);
                 exit();
             }
-            $sql = "INSERT INTO convoys (convoy_number, departure_address, arrival_address, start_datetime, pallets_recovered, status, created_at) VALUES (:convoy_number, :departure_address, :arrival_address, :start_datetime, :pallets_recovered, :status, NOW())";
+            $sql = "INSERT INTO convoys (convoy_number, convoy_type, start_datetime, end_datetime, personnel, created_at) VALUES (:convoy_number, :convoy_type, :start_datetime, :end_datetime, :personnel, NOW())";
             $params = [
                 'convoy_number' => $convoy_number,
-                'departure_address' => $departure_address,
-                'arrival_address' => $arrival_address,
+                'convoy_type' => $convoy_type,
                 'start_datetime' => $start_datetime,
-                'pallets_recovered' => $pallets_recovered,
-                'status' => $status
+                'end_datetime' => $end_datetime,
+                'personnel' => $personnel
             ];
             $result = executeQuery($sql, $params);
             if ($result) {
