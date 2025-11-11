@@ -1,6 +1,52 @@
-node_modules/
+# Fichiers de configuration personnalisés
+backend/db.php
+config.php
+
+# Logs
+*.log
+logs/
+error_log
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Cache
+cache/
+tmp/
+
+# Uploads
+uploads/
+*.upload
+
+# IDE et éditeurs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Environnement
 .env
 .env.local
-.DS_Store
-*.log
-npm-debug.log*
+
+# Backup
+*.bak
+*.backup
+backup/
+
+# Composer (si utilisé)
+vendor/
+composer.lock
+
+# NPM (si utilisé)
+node_modules/
+package-lock.json
+
+# Fichiers système
+.htaccess.bak
+php_errors.log

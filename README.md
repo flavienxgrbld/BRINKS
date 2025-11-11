@@ -1,225 +1,225 @@
-# Système d'Authentification BRINKS
+# SYSTÈME DE GESTION BRINKS
 
-Système web de gestion d'utilisateurs avec authentification et contrôle d'accès basé sur les rôles.
+## Description
+Système complet de gestion de convois pour BRINKS avec interface web multi-pages, authentification sécurisée et base de données MySQL.
 
-## 📋 Caractéristiques
+## 🚀 Installation
 
-- ✅ Page de connexion sécurisée
-- ✅ Authentification par session
-- ✅ Gestion des rôles (Utilisateur / Administrateur)
-- ✅ Page d'accueil personnalisée selon le rôle
-- ✅ Interface d'administration pour la gestion des utilisateurs (réservée aux administrateurs)
-- ✅ CRUD complet des utilisateurs
-- ✅ Réinitialisation de mot de passe
-- ✅ Hashage sécurisé des mots de passe (bcrypt)
+### 1. Configuration de la base de données MySQL
 
-## 🛠️ Technologies utilisées
+Connectez-vous à votre serveur MySQL et exécutez les commandes SQL suivantes :
 
-**Backend:**
-- Node.js
-- Express.js
-- MySQL2
-- express-session
-- bcryptjs
+```sql
+CREATE DATABASE IF NOT EXISTS brinks_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-**Frontend:**
-- HTML5
-- CSS3
-- JavaScript (Vanilla)
+USE brinks_db;
 
-## 📦 Installation
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id VARCHAR(50) UNIQUE NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    role ENUM('ADMIN', 'USER') DEFAULT 'USER',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    active TINYINT(1) DEFAULT 1
+);
 
-### Prérequis
+CREATE TABLE convoys (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    convoy_number VARCHAR(50) UNIQUE NOT NULL,
+    start_datetime DATETIME NOT NULL,
+    end_datetime DATETIME,
+    pallets_recovered INT DEFAULT 0,
+    pallets_stored INT DEFAULT 0,
+    pallets_sold INT DEFAULT 0,
+    departure_address TEXT NOT NULL,
+    arrival_address TEXT NOT NULL,
+    notes TEXT,
+    incidents TEXT,
+    status ENUM('EN_COURS', 'TERMINE', 'ANNULE') DEFAULT 'EN_COURS',
+    validated_by INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (validated_by) REFERENCES users(id) ON DELETE SET NULL
+);
 
-- Node.js (v14 ou supérieur)
-- Serveur MySQL (accessible sur SRV-MGT-01)
-- npm ou yarn
+CREATE TABLE convoy_personnel (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    convoy_id INT NOT NULL,
+    user_id INT NOT NULL,
+    role_in_convoy ENUM('CHEF', 'CONVOYEUR', 'CONTROLEUR') NOT NULL,
+    FOREIGN KEY (convoy_id) REFERENCES convoys(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_convoy_user (convoy_id, user_id)
+);
 
-### Étapes d'installation
+CREATE TABLE convoy_steps (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    convoy_id INT NOT NULL,
+    step_order INT NOT NULL,
+    address TEXT NOT NULL,
+    arrival_time DATETIME,
+    departure_time DATETIME,
+    notes TEXT,
+    FOREIGN KEY (convoy_id) REFERENCES convoys(id) ON DELETE CASCADE
+);
 
-1. **Installer les dépendances**
-   ```powershell
-   npm install
-   ```
-
-2. **Configurer les variables d'environnement**
-   
-   Le fichier `.env` est déjà configuré avec les paramètres suivants :
-   ```
-   DB_HOST=SRV-MGT-01
-   DB_USER=root
-   DB_PASSWORD=@Dmin_password
-   DB_NAME=brinks_db
-   DB_PORT=3306
-   PORT=3000
-   SESSION_SECRET=votre_secret_session_tres_securise_a_changer
-   ```
-
-   ⚠️ **IMPORTANT** : Changez la valeur de `SESSION_SECRET` pour votre environnement de production !
-
-3. **Initialiser la base de données**
-   ```powershell
-   node scripts/init-database.js
-   ```
-
-   Ce script va :
-   - Créer la base de données `brinks_db`
-   - Créer la table `users`
-   - Créer un utilisateur administrateur par défaut
-
-4. **Lancer le serveur**
-   ```powershell
-   npm start
-   ```
-
-   Pour le développement avec rechargement automatique :
-   ```powershell
-   npm run dev
-   ```
-
-## 🚀 Utilisation
-
-### Accès à l'application
-
-Une fois le serveur démarré :
-
-- **Page de connexion** : http://localhost:3000
-- **Page d'accueil** : http://localhost:3000/home
-- **Gestion des utilisateurs** : http://localhost:3000/admin/users
-
-### Compte administrateur par défaut
-
-```
-Nom d'utilisateur : admin
-Mot de passe : Admin123!
-Email : admin@brinks.com
+INSERT INTO users (employee_id, username, password, firstname, lastname, email, role) 
+VALUES ('EMP001', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrateur', 'Système', 'admin@brinks.com', 'ADMIN');
 ```
 
-⚠️ **Changez ce mot de passe immédiatement après la première connexion !**
+### 2. Configuration de la connexion MySQL
 
-## 📁 Structure du projet
+Éditez le fichier `backend/db.php` et modifiez les paramètres de connexion :
+
+```php
+define('DB_HOST', 'localhost');    // Adresse du serveur MySQL
+define('DB_NAME', 'brinks_db');    // Nom de la base de données
+define('DB_USER', 'root');         // Nom d'utilisateur MySQL
+define('DB_PASS', '');             // Mot de passe MySQL
+```
+
+### 3. Déploiement sur Apache
+
+Copiez tous les fichiers dans le répertoire `/var/www/html` de votre serveur Apache :
+
+```bash
+# Sur Windows (PowerShell)
+Copy-Item -Recurse -Force "j:\git\BRINKS\*" "C:\xampp\htdocs\brinks\"
+
+# Sur Linux
+sudo cp -r /chemin/vers/BRINKS/* /var/www/html/
+```
+
+### 4. Permissions (Linux uniquement)
+
+```bash
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+```
+
+## 🔐 Connexion par défaut
+
+- **Nom d'utilisateur** : `admin`
+- **Mot de passe** : `password`
+
+⚠️ **IMPORTANT** : Changez ce mot de passe immédiatement après la première connexion !
+
+## 📁 Structure des fichiers
 
 ```
 BRINKS/
-├── config/
-│   └── database.js          # Configuration de la connexion MySQL
-├── middleware/
-│   └── auth.js              # Middlewares d'authentification et d'autorisation
-├── routes/
-│   ├── auth.js              # Routes d'authentification (login, logout)
-│   └── users.js             # Routes de gestion des utilisateurs (CRUD)
-├── public/
-│   ├── css/
-│   │   └── style.css        # Styles CSS
-│   ├── js/
-│   │   ├── login.js         # Logique de la page de connexion
-│   │   ├── home.js          # Logique de la page d'accueil
-│   │   └── admin-users.js   # Logique de la page de gestion des utilisateurs
-│   ├── login.html           # Page de connexion
-│   ├── home.html            # Page d'accueil
-│   └── admin-users.html     # Page de gestion des utilisateurs
-├── scripts/
-│   └── init-database.js     # Script d'initialisation de la base de données
-├── database/
-│   └── schema.sql           # Schéma SQL de la base de données
-├── server.js                # Point d'entrée du serveur
-├── package.json
-├── .env                     # Variables d'environnement
-└── README.md
+├── backend/
+│   ├── db.php              # Connexion à la base de données
+│   ├── auth.php            # Gestion de l'authentification
+│   ├── api_login.php       # API de connexion
+│   ├── api_logout.php      # API de déconnexion
+│   ├── api_users.php       # API de gestion des utilisateurs
+│   ├── api_convoys.php     # API de gestion des convois
+│   └── api_export.php      # API d'export CSV/PDF
+├── css/
+│   └── style.css           # Feuille de style principale
+├── js/
+│   └── main.js             # JavaScript principal
+├── images/
+│   └── brinks-logo.png     # Logo (à ajouter)
+├── includes/
+│   └── header.php          # En-tête commune
+├── index.php               # Page de connexion
+├── dashboard.php           # Tableau de bord
+├── users.php               # Gestion des utilisateurs (ADMIN)
+├── reports.php             # Rapports utilisateurs
+├── admin-reports.php       # Rapports administrateurs (ADMIN)
+└── convoy-detail.php       # Détails d'un convoi
 ```
+
+## 🎯 Fonctionnalités
+
+### Pour tous les utilisateurs
+- ✅ Connexion sécurisée avec session PHP
+- ✅ Tableau de bord avec statistiques en temps réel
+- ✅ Visualisation de ses propres rapports de convois
+- ✅ Détails complets de chaque convoi
+- ✅ Interface responsive (mobile/desktop)
+
+### Pour les administrateurs
+- ✅ Gestion complète des utilisateurs (CRUD)
+- ✅ Attribution des rôles (ADMIN/USER)
+- ✅ Accès à tous les rapports de convois
+- ✅ Filtres avancés (date, statut, utilisateur, palettes)
+- ✅ Export CSV et PDF
+- ✅ Validation des convois
+
+## 🔧 Technologies utilisées
+
+- **Frontend** : HTML5, CSS3, JavaScript (Vanilla)
+- **Backend** : PHP 7.4+
+- **Base de données** : MySQL 5.7+
+- **Serveur web** : Apache 2.4+
+
+## 📊 Schéma de base de données
+
+### Table `users`
+Stocke les utilisateurs du système avec leurs rôles et informations.
+
+### Table `convoys`
+Contient tous les convois avec leurs détails (dates, palettes, adresses, etc.).
+
+### Table `convoy_personnel`
+Relation many-to-many entre convois et utilisateurs avec leur rôle dans le convoi.
+
+### Table `convoy_steps`
+Étapes intermédiaires des convois (adresses, heures d'arrivée/départ).
+
+## 🎨 Design
+
+Le design utilise une palette de couleurs professionnelle :
+- **Bleu foncé** (#1a2332) : Couleur principale
+- **Gris acier** (#4a5568) : Couleur secondaire
+- **Bleu accent** (#3182ce) : Éléments interactifs
+- **Vert** (#48bb78) : Succès
+- **Orange** (#ed8936) : Avertissement
+- **Rouge** (#f56565) : Danger/Erreur
 
 ## 🔒 Sécurité
 
-- Les mots de passe sont hashés avec bcrypt (10 rounds)
-- Les sessions sont sécurisées avec express-session
-- Protection CSRF via les en-têtes HTTP
-- Validation des données côté serveur
-- Contrôle d'accès basé sur les rôles (RBAC)
+- ✅ Mots de passe hashés avec bcrypt
+- ✅ Requêtes préparées (protection SQL injection)
+- ✅ Validation des sessions PHP
+- ✅ Vérification des rôles côté serveur
+- ✅ Protection CSRF (à améliorer en production)
+- ✅ Échappement des données affichées
 
-## 👥 Gestion des utilisateurs
+## 📝 Notes importantes
 
-### Rôles disponibles
-
-1. **USER** : Utilisateur standard
-   - Accès à la page d'accueil
-   - Consultation de ses propres informations
-
-2. **ADMIN** : Administrateur
-   - Tous les droits de l'utilisateur standard
-   - Accès à la page de gestion des utilisateurs
-   - Création, modification, suppression d'utilisateurs
-   - Réinitialisation des mots de passe
-
-### Fonctionnalités d'administration
-
-Les administrateurs peuvent :
-- Voir la liste complète des utilisateurs
-- Créer de nouveaux utilisateurs
-- Modifier les informations des utilisateurs
-- Activer/désactiver des comptes
-- Réinitialiser les mots de passe
-- Supprimer des utilisateurs (sauf leur propre compte)
-
-## 🗄️ Base de données
-
-### Table : users
-
-| Colonne | Type | Description |
-|---------|------|-------------|
-| id | INT | Identifiant unique (auto-increment) |
-| username | VARCHAR(50) | Nom d'utilisateur (unique) |
-| email | VARCHAR(100) | Adresse email (unique) |
-| password | VARCHAR(255) | Mot de passe hashé |
-| role | ENUM('USER', 'ADMIN') | Rôle de l'utilisateur |
-| created_at | TIMESTAMP | Date de création |
-| updated_at | TIMESTAMP | Date de dernière modification |
-| last_login | TIMESTAMP | Date de dernière connexion |
-| is_active | BOOLEAN | Statut du compte (actif/inactif) |
-
-## 🔧 API Endpoints
-
-### Authentification
-
-- `POST /api/auth/login` - Connexion
-- `POST /api/auth/logout` - Déconnexion
-- `GET /api/auth/check` - Vérifier la session
-
-### Gestion des utilisateurs (Admin uniquement)
-
-- `GET /api/users` - Liste tous les utilisateurs
-- `GET /api/users/:id` - Récupère un utilisateur
-- `POST /api/users` - Crée un utilisateur
-- `PUT /api/users/:id` - Modifie un utilisateur
-- `DELETE /api/users/:id` - Supprime un utilisateur
-- `POST /api/users/:id/reset-password` - Réinitialise le mot de passe
+1. **Production** : En production, configurez PHP pour ne pas afficher les erreurs
+2. **HTTPS** : Utilisez HTTPS pour sécuriser les communications
+3. **Backup** : Effectuez des sauvegardes régulières de la base de données
+4. **Logo** : Ajoutez votre logo BRINKS dans `/images/brinks-logo.png`
 
 ## 🐛 Dépannage
 
 ### Erreur de connexion à la base de données
+- Vérifiez les paramètres dans `backend/db.php`
+- Assurez-vous que MySQL est démarré
+- Vérifiez les permissions de l'utilisateur MySQL
 
-Vérifiez que :
-- Le serveur MySQL est accessible sur SRV-MGT-01
-- Les identifiants dans le fichier `.env` sont corrects
-- Le port 3306 est ouvert
+### Page blanche
+- Activez l'affichage des erreurs PHP temporairement
+- Vérifiez les logs Apache (`/var/log/apache2/error.log`)
 
-### Le serveur ne démarre pas
+### Session non persistante
+- Vérifiez que PHP peut écrire dans le dossier de sessions
+- Vérifiez la configuration `session.save_path` dans `php.ini`
 
-Vérifiez que :
-- Le port 3000 n'est pas déjà utilisé
-- Toutes les dépendances sont installées (`npm install`)
-- Le fichier `.env` existe et contient les bonnes valeurs
+## 📞 Support
 
-## 📝 Notes importantes
+Pour toute question ou problème, contactez l'administrateur système.
 
-1. **Mot de passe par défaut** : Changez le mot de passe de l'administrateur par défaut dès la première connexion
-2. **SESSION_SECRET** : Utilisez un secret fort et unique pour la production
-3. **HTTPS** : En production, configurez HTTPS et mettez `cookie.secure: true`
-4. **Sauvegardes** : Effectuez des sauvegardes régulières de la base de données
+---
 
-## 📄 Licence
-
-Ce projet est destiné à un usage interne BRINKS.
-
-## 👨‍💻 Support
-
-Pour toute question ou problème, contactez l'équipe de développement.
+© 2025 BRINKS - Système de Gestion de Convois
