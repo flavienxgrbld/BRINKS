@@ -1,51 +1,23 @@
-# Fichiers de configuration personnalisés
-
-
-# Logs
-*.log
-logs/
-error_log
-
-# Fichiers temporaires
-*.tmp
-*.temp
-*.swp
-*.swo
-*~
-
-# Cache
-cache/
-tmp/
-
-# Uploads
-uploads/
-*.upload
-
-# IDE et éditeurs
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-.DS_Store
-Thumbs.db
-
-# Environnement
-.env
-.env.local
-
-# Backup
-*.bak
-*.backup
-backup/
-
-# Composer (si utilisé)
-vendor/
-composer.lock
-
-# NPM (si utilisé)
-node_modules/
-package-lock.json
+# Fichiers de test
+test_*.php
+fix_server.sh
 
 # Fichiers système
-.htaccess.bak
-php_errors.log
+.DS_Store
+Thumbs.db
+*.log
+
+# Sauvegardes
+*.backup
+*.bak
+.htaccess.backup.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environnement (si utilisé plus tard)
+.env
+.env.local

@@ -1,28 +1,23 @@
-# Configuration Apache pour BRINKS
+# Configuration Apache pour BRINKS - Compatible Apache 2.4
 
+# Activer le moteur de réécriture
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    
+    # Ne PAS rediriger les fichiers existants (PHP, CSS, JS, images, etc.)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+</IfModule>
 
-    # Ne pas rediriger les fichiers PHP existants
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} !\.php$
-    RewriteRule ^(.*)$ index.php [L,QSA]
-</IfModule># Protection des fichiers sensibles
-<FilesMatch "\.(env|ini|log|sh|sql)$">
-    Order allow,deny
-    Deny from all
+# Protection des fichiers sensibles (syntaxe Apache 2.4)
+<FilesMatch "\.(env|ini|log|sh|sql|md)$">
+    Require all denied
 </FilesMatch>
-
-# Protection du dossier backend
-<Directory "backend">
-    Order allow,deny
-    Allow from all
-</Directory>
 
 # Activer la compression
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
 </IfModule>
 
 # Cache pour les ressources statiques
@@ -37,9 +32,10 @@
     ExpiresByType application/javascript "access plus 1 month"
 </IfModule>
 
-# Sécurité supplémentaire
+# Headers de sécurité
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-XSS-Protection "1; mode=block"
 </IfModule>
+
