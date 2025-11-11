@@ -143,11 +143,10 @@ function openCreateReportModal() {
         const form = e.target;
         const data = {
             convoy_number: form.convoy_number.value,
-            departure_address: form.departure_address.value,
-            arrival_address: form.arrival_address.value,
+            convoy_type: form.convoy_type.value,
             start_datetime: form.start_datetime.value,
-            pallets_recovered: form.pallets_recovered.value,
-            status: form.status.value
+            end_datetime: form.end_datetime.value,
+            personnel: form.personnel.value
         };
         try {
             const response = await fetch('backend/api_convoys.php?action=create', {
