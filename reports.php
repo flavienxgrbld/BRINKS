@@ -45,27 +45,26 @@ if ($currentUser['role'] === 'ADMIN') {
                     <input type="text" id="convoyNumber" name="convoy_number" required>
                 </div>
                 <div class="form-group">
-                    <label for="departureAddress">Adresse de départ *</label>
-                    <input type="text" id="departureAddress" name="departure_address" required>
+                    <label for="convoyType">Type de convoi *</label>
+                    <select id="convoyType" name="convoy_type" required>
+                        <option value="RECOLTE">Récolte</option>
+                        <option value="TRAITEMENT_SEUL">Traitement seul</option>
+                        <option value="REVENTE_SEUL">Revente seul</option>
+                        <option value="TRAITEMENT_REVENTE">Traitement et revente</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="arrivalAddress">Adresse d'arrivée *</label>
-                    <input type="text" id="arrivalAddress" name="arrival_address" required>
-                </div>
-                <div class="form-group">
-                    <label for="startDate">Date de début *</label>
+                    <label for="startDate">Date/heure de début *</label>
                     <input type="datetime-local" id="startDate" name="start_datetime" required>
                 </div>
                 <div class="form-group">
-                    <label for="palletsRecovered">Palettes récupérées</label>
-                    <input type="number" id="palletsRecovered" name="pallets_recovered" min="0">
+                    <label for="endDate">Date/heure de fin *</label>
+                    <input type="datetime-local" id="endDate" name="end_datetime" required>
                 </div>
                 <div class="form-group">
-                    <label for="status">Statut</label>
-                    <select id="status" name="status">
-                        <option value="EN_COURS">En cours</option>
-                        <option value="TERMINE">Terminé</option>
-                        <option value="ANNULE">Annulé</option>
+                    <label for="personnel">Personnel présent *</label>
+                    <select id="personnel" name="personnel[]" multiple required>
+                        <!-- Options générées dynamiquement en JS -->
                     </select>
                 </div>
                 <div class="form-group align-end">
@@ -113,6 +112,28 @@ if ($currentUser['role'] === 'ADMIN') {
     
     <script src="js/main.js"></script>
     <script>
+// Charger la liste du personnel au chargement du modal
+function loadPersonnelOptions() {
+    fetch('backend/api_users.php?action=list')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('personnel');
+            select.innerHTML = '';
+            if (data.success && Array.isArray(data.users)) {
+                data.users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.firstname + ' ' + user.lastname;
+                    select.appendChild(option);
+                });
+            }
+        });
+}
+
+function openCreateReportModal() {
+    document.getElementById('createReportModal').style.display = 'block';
+    loadPersonnelOptions();
+}
     function openCreateReportModal() {
         document.getElementById('createReportModal').style.display = 'block';
     }
