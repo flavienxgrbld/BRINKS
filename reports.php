@@ -1,3 +1,7 @@
+                <div class="form-group">
+                    <label for="arrivalAddress">Adresse d'arrivée *</label>
+                    <input type="text" id="arrivalAddress" name="arrival_address" required>
+                </div>
 <?php
 require_once __DIR__ . '/backend/auth.php';
 requireLogin();
@@ -120,6 +124,7 @@ if ($currentUser['role'] === 'ADMIN') {
         const data = {
             convoy_number: form.convoy_number.value,
             departure_address: form.departure_address.value,
+            arrival_address: form.arrival_address.value,
             start_datetime: form.start_datetime.value,
             pallets_recovered: form.pallets_recovered.value,
             status: form.status.value
