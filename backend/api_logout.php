@@ -9,5 +9,5 @@ session_start();
 session_unset();
 session_destroy();
 
-header('Location: /BRINKS/login.php');
+header('Location: /BRINKS/index.php');
 exit();
