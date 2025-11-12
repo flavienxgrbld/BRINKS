@@ -235,18 +235,25 @@ function openCreateReportModal() {
                                   convoy.status === 'EN_COURS' ? 'warning' : 'danger';
                 const roleClass = convoy.role_in_convoy === 'CHEF' ? 'danger' : 
                                 convoy.role_in_convoy === 'CONVOYEUR' ? 'info' : 'secondary';
-                
+                let palettesInfo = '';
+                if (convoy.convoy_type === 'RECOLTE') {
+                    palettesInfo = `<span class='badge badge-success'>${convoy.pallets_recolte ?? 0} récoltées</span>`;
+                } else if (convoy.convoy_type === 'TRAITEMENT_SEUL') {
+                    palettesInfo = `<span class='badge badge-info'>${convoy.pallets_traite ?? 0} traitées</span>`;
+                } else if (convoy.convoy_type === 'REVENTE_SEUL') {
+                    palettesInfo = `<span class='badge badge-warning'>${convoy.pallets_revendu ?? 0} revendues</span>`;
+                } else if (convoy.convoy_type === 'TRAITEMENT_REVENTE') {
+                    palettesInfo = `<span class='badge badge-info'>${convoy.pallets_traite ?? 0} traitées</span> <span class='badge badge-warning'>${convoy.pallets_revendu ?? 0} revendues</span>`;
+                }
                 return `
                     <tr>
                         <td><strong>${convoy.convoy_number}</strong></td>
                         <td>${formatDateTime(convoy.start_datetime)}</td>
                         <td>${convoy.end_datetime ? formatDateTime(convoy.end_datetime) : '<em>En cours</em>'}</td>
                         <td>${duration}</td>
-                        <td>
-                            <span class="badge badge-success">${convoy.pallets_recovered} récupérées</span>
-                        </td>
-                        <td><span class="badge badge-${roleClass}">${convoy.role_in_convoy}</span></td>
-                        <td><span class="badge badge-${statusClass}">${convoy.status}</span></td>
+                        <td>${palettesInfo}</td>
+                        <td><span class="badge badge-${roleClass}">${convoy.role_in_convoy ?? ''}</span></td>
+                        <td><span class="badge badge-${statusClass}">${convoy.status ?? ''}</span></td>
                         <td>
                             <a href="convoy-detail.php?id=${convoy.id}" class="btn btn-sm">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
