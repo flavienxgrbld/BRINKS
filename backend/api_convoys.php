@@ -102,10 +102,10 @@ switch ($action) {
             exit();
         case 'list':
             if (isAdmin()) {
-                $sql = "SELECT c.*, u.firstname as validator_firstname, u.lastname as validator_lastname, (SELECT COUNT(*) FROM convoy_personnel WHERE convoy_id = c.id) as personnel_count FROM convoys c LEFT JOIN users u ON c.validated_by = u.id ORDER BY c.created_at DESC";
+                $sql = "SELECT c.*, c.pallets_recolte, c.pallets_traite, c.pallets_revendu, u.firstname as validator_firstname, u.lastname as validator_lastname, (SELECT COUNT(*) FROM convoy_personnel WHERE convoy_id = c.id) as personnel_count FROM convoys c LEFT JOIN users u ON c.validated_by = u.id ORDER BY c.created_at DESC";
                 $convoys = fetchAll($sql);
             } else {
-                $sql = "SELECT c.*, u.firstname as validator_firstname, u.lastname as validator_lastname, cp.role_in_convoy FROM convoys c INNER JOIN convoy_personnel cp ON c.id = cp.convoy_id LEFT JOIN users u ON c.validated_by = u.id WHERE cp.user_id = :user_id ORDER BY c.created_at DESC";
+                $sql = "SELECT c.*, c.pallets_recolte, c.pallets_traite, c.pallets_revendu, u.firstname as validator_firstname, u.lastname as validator_lastname, cp.role_in_convoy FROM convoys c INNER JOIN convoy_personnel cp ON c.id = cp.convoy_id LEFT JOIN users u ON c.validated_by = u.id WHERE cp.user_id = :user_id ORDER BY c.created_at DESC";
                 $convoys = fetchAll($sql, ['user_id' => $_SESSION['user_id']]);
             }
             echo json_encode(['success' => true, 'convoys' => $convoys]);
