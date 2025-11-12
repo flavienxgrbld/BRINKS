@@ -143,27 +143,27 @@ switch ($action) {
             echo json_encode(['success' => true, 'convoy' => $convoy]);
             break;
         case 'stats':
-            $stats = [];
-            $sql = "SELECT COUNT(*) as total FROM convoys";
-            $result = fetchOne($sql);
-            $stats['total_convoys'] = $result['total'];
-            $sql = "SELECT SUM(pallets_recovered) as total FROM convoys";
-            $result = fetchOne($sql);
-            $stats['total_pallets_recovered'] = $result['total'] ?? 0;
-            $sql = "SELECT SUM(pallets_stored) as total FROM convoys";
-            $result = fetchOne($sql);
-            $stats['total_pallets_stored'] = $result['total'] ?? 0;
-            $sql = "SELECT SUM(pallets_sold) as total FROM convoys";
-            $result = fetchOne($sql);
-            $stats['total_pallets_sold'] = $result['total'] ?? 0;
-            $sql = "SELECT COUNT(*) as total FROM convoys WHERE status = 'EN_COURS'";
-            $result = fetchOne($sql);
-            $stats['convoys_in_progress'] = $result['total'];
-            $sql = "SELECT COUNT(*) as total FROM convoys WHERE status = 'TERMINE'";
-            $result = fetchOne($sql);
-            $stats['convoys_completed'] = $result['total'];
-            echo json_encode(['success' => true, 'stats' => $stats]);
-            break;
+        $stats = [];
+        $sql = "SELECT COUNT(*) as total FROM convoys";
+        $result = fetchOne($sql);
+        $stats['total_convoys'] = $result['total'];
+        $sql = "SELECT SUM(pallets_recolte) as total FROM convoys";
+        $result = fetchOne($sql);
+        $stats['total_pallets_recolte'] = $result['total'] ?? 0;
+        $sql = "SELECT SUM(pallets_traite) as total FROM convoys";
+        $result = fetchOne($sql);
+        $stats['total_pallets_traite'] = $result['total'] ?? 0;
+        $sql = "SELECT SUM(pallets_revendu) as total FROM convoys";
+        $result = fetchOne($sql);
+        $stats['total_pallets_revendu'] = $result['total'] ?? 0;
+        $sql = "SELECT COUNT(*) as total FROM convoys WHERE status = 'EN_COURS'";
+        $result = fetchOne($sql);
+        $stats['convoys_in_progress'] = $result['total'];
+        $sql = "SELECT COUNT(*) as total FROM convoys WHERE status = 'TERMINE'";
+        $result = fetchOne($sql);
+        $stats['convoys_completed'] = $result['total'];
+        echo json_encode(['success' => true, 'stats' => $stats]);
+        break;
         case 'filter':
             if (!isAdmin()) {
                 echo json_encode(['success' => false, 'message' => 'Accès non autorisé']);

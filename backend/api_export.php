@@ -32,14 +32,15 @@ if (!empty($filters['status'])) {
 
 $whereSql = !empty($sqlFilters) ? ' WHERE ' . implode(' AND ', $sqlFilters) : '';
 
+
 $sql = "SELECT c.id, c.convoy_number, c.start_datetime, c.end_datetime, 
-        c.pallets_recovered, c.pallets_stored, c.pallets_sold, 
-        c.departure_address, c.arrival_address, c.status,
-        u.firstname as validator_firstname, u.lastname as validator_lastname
-        FROM convoys c
-        LEFT JOIN users u ON c.validated_by = u.id
-        $whereSql
-        ORDER BY c.start_datetime DESC";
+    c.pallets_recolte, c.pallets_traite, c.pallets_revendu, 
+    c.departure_address, c.arrival_address, c.status,
+    u.firstname as validator_firstname, u.lastname as validator_lastname
+    FROM convoys c
+    LEFT JOIN users u ON c.validated_by = u.id
+    $whereSql
+    ORDER BY c.start_datetime DESC";
 
 $convoys = fetchAll($sql, $params);
 
@@ -54,9 +55,9 @@ if ($format === 'csv') {
         'Numéro',
         'Début',
         'Fin',
-        'Palettes Récupérées',
-        'Palettes Stockées',
-        'Palettes Vendues',
+        'Palettes Récoltées',
+        'Palettes Traitées',
+        'Palettes Revendues',
         'Départ',
         'Arrivée',
         'Statut',
@@ -69,9 +70,9 @@ if ($format === 'csv') {
             $convoy['convoy_number'],
             $convoy['start_datetime'],
             $convoy['end_datetime'] ?? 'En cours',
-            $convoy['pallets_recovered'],
-            $convoy['pallets_stored'],
-            $convoy['pallets_sold'],
+            $convoy['pallets_recolte'],
+            $convoy['pallets_traite'],
+            $convoy['pallets_revendu'],
             $convoy['departure_address'],
             $convoy['arrival_address'],
             $convoy['status'],
@@ -80,5 +81,42 @@ if ($format === 'csv') {
     }
     
     fclose($output);
+    exit();
+} else {
+    // Export HTML (tableau)
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Rapports de Convois</title></head><body>';
+    echo '<h1>Rapports de Convois</h1>';
+    echo '<table border="1" cellpadding="6" cellspacing="0">';
+    echo '<thead><tr>
+        <th>ID Convoi</th>
+        <th>Numéro</th>
+        <th>Début</th>
+        <th>Fin</th>
+        <th>Palettes Récoltées</th>
+        <th>Palettes Traitées</th>
+        <th>Palettes Revendues</th>
+        <th>Départ</th>
+        <th>Arrivée</th>
+        <th>Statut</th>
+        <th>Validé par</th>
+    </tr></thead><tbody>';
+    foreach ($convoys as $convoy) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($convoy['id']) . '</td>';
+        echo '<td>' . htmlspecialchars($convoy['convoy_number']) . '</td>';
+        echo '<td>' . htmlspecialchars($convoy['start_datetime']) . '</td>';
+        echo '<td>' . htmlspecialchars($convoy['end_datetime'] ?? 'En cours') . '</td>';
+        echo '<td>' . htmlspecialchars($convoy['pallets_recolte']) . '</td>';
+        echo '<td>' . htmlspecialchars($convoy['pallets_traite']) . '</td>';
+        echo '<td>' . htmlspecialchars($convoy['pallets_revendu']) . '</td>';
+        echo '<td>' . htmlspecialchars($convoy['departure_address']) . '</td>';
+        echo '<td>' . htmlspecialchars($convoy['arrival_address']) . '</td>';
+        echo '<td>' . htmlspecialchars($convoy['status']) . '</td>';
+        echo '<td>' . ($convoy['validator_firstname'] ? htmlspecialchars($convoy['validator_firstname'] . ' ' . $convoy['validator_lastname']) : 'Non validé') . '</td>';
+        echo '</tr>';
+    }
+    echo '</tbody></table>';
+    echo '</body></html>';
     exit();
 }

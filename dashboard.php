@@ -78,11 +78,10 @@ $currentUser = getCurrentUser();
                                 </svg>
                             </div>
                             <div class="stat-content">
-                                <h3>${stats.total_pallets_recovered}</h3>
-                                <p>Palettes Récupérées</p>
+                                <h3>${stats.total_pallets_recolte}</h3>
+                                <p>Palettes Récoltées</p>
                             </div>
                         </div>
-                        
                         <div class="stat-card">
                             <div class="stat-icon warning">
                                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -90,11 +89,10 @@ $currentUser = getCurrentUser();
                                 </svg>
                             </div>
                             <div class="stat-content">
-                                <h3>${stats.total_pallets_stored}</h3>
-                                <p>Palettes Stockées</p>
+                                <h3>${stats.total_pallets_traite}</h3>
+                                <p>Palettes Traitées</p>
                             </div>
                         </div>
-                        
                         <div class="stat-card">
                             <div class="stat-icon info">
                                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -104,8 +102,8 @@ $currentUser = getCurrentUser();
                                 </svg>
                             </div>
                             <div class="stat-content">
-                                <h3>${stats.total_pallets_sold}</h3>
-                                <p>Palettes Vendues</p>
+                                <h3>${stats.total_pallets_revendu}</h3>
+                                <p>Palettes Revendues</p>
                             </div>
                         </div>
                     `;
